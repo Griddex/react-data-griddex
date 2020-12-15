@@ -1,16 +1,16 @@
 {
-  "name": "react-data-grid",
-  "version": "7.0.0-canary.33",
+  "name": "react-data-griddex",
+  "version": "0.1.0",
   "license": "MIT",
   "description": "Excel-like grid component built with React, with editors, keyboard navigation, copy & paste, and the like",
   "keywords": [
     "react",
-    "react-data-grid",
+    "react-data-griddex",
     "data-grid"
   ],
-  "repository": "github:adazzle/react-data-grid",
+  "repository": "github:Griddex/react-data-griddex",
   "bugs": {
-    "url": "https://github.com/adazzle/react-data-grid/issues"
+    "url": "https://github.com/Griddex/react-data-griddex/issues"
   },
   "type": "module",
   "exports": {

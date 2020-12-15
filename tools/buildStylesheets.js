@@ -1,21 +1,21 @@
-import { promises as fs } from 'fs';
-import { dirname } from 'path';
-import less from 'less';
-import CleanCSS from 'clean-css';
+import { dirname } from "path";
+import { promises as fs } from "fs";
+import less from "less";
+import CleanCSS from "clean-css";
 
-const path = './style/index.less';
-const dest = './dist/react-data-grid.css';
+const path = "./style/index.less";
+const dest = "./dist/react-data-grid.css";
 
 const cleanCSS = new CleanCSS({
   level: { 1: { specialComments: false }, 2: {} },
   rebase: false,
-  returnPromise: true
+  returnPromise: true,
 });
 
 buildStylesheet();
 
 async function buildStylesheet() {
-  const buf = await fs.readFile(path, 'utf8');
+  const buf = await fs.readFile(path, "utf8");
   try {
     const { css } = await less.render(buf, { filename: path });
     const { styles } = await cleanCSS.minify(css);
