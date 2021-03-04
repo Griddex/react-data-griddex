@@ -12,8 +12,6 @@ const cleanCSS = new CleanCSS({
   returnPromise: true,
 });
 
-buildStylesheet();
-
 async function buildStylesheet() {
   const buf = await fs.readFile(path, "utf8");
   try {
@@ -26,3 +24,5 @@ async function buildStylesheet() {
     process.exitCode = 1;
   }
 }
+
+await buildStylesheet();

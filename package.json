@@ -36,6 +36,7 @@
   "scripts": {
     "start": "start-storybook --quiet --no-dll -p 6006",
     "build": "rollup --config --no-stdin",
+
     "test": "jest",
     "test:watch": "jest --watch",
     "eslint": "eslint --ext js,ts,tsx --max-warnings 0 -f codeframe --cache --color src stories test tools",
@@ -46,7 +47,9 @@
     "postpublish": "git push --follow-tags origin HEAD"
   },
   "dependencies": {
-    "clsx": "^1.1.1"
+    "clsx": "^1.1.1",
+    "react-data-grid": "^7.0.0-canary.33",
+    "react-data-grid-addons": "^7.0.0-alpha.24"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
