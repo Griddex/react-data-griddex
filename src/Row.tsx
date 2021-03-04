@@ -4,7 +4,7 @@ import clsx from "clsx";
 import Cell from "./Cell";
 import EditCell from "./EditCell";
 import type {
-  EditCellProps,
+  // EditCellProps,
   RowRendererProps,
   SelectedCellProps,
 } from "./types";
@@ -50,9 +50,9 @@ function Row<R, SR = unknown>(
     className
   );
 
-  const isEditorCell = (prop: any): prop is EditCellProps<R> => {
-    return (prop as EditCellProps<R>).mode !== undefined;
-  };
+  // const isEditorCell = (prop: any): prop is EditCellProps<R> => {
+  //   return (prop as EditCellProps<R>).mode !== undefined;
+  // };
 
   return (
     <div
