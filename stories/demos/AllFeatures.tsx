@@ -1,14 +1,16 @@
-import faker from 'faker';
-import { useState, useRef } from 'react';
-import DataGrid, { SelectColumn, TextEditor } from '../../src';
-import type { Column, DataGridHandle, FillEvent, PasteEvent } from '../../src';
-import DropDownEditor from './components/Editors/DropDownEditor';
-import { ImageFormatter } from './components/Formatters';
+import faker from "faker";
+import { useState, useRef } from "react";
+import DataGrid, { SelectColumn, TextEditor } from "../../src";
+import type { Column, DataGridHandle, FillEvent, PasteEvent } from "../../src";
+import DropDownEditor from "./components/Editors/DropDownEditor";
+import { ImageFormatter } from "./components/Formatters";
+import { SelectCellFormatter } from "../../src/formatters";
 
-import './AllFeatures.less';
+import "./AllFeatures.less";
 
 export interface Row {
-  id: string;
+  // id: string;
+  id: number;
   avatar: string;
   email: string;
   title: string;
@@ -28,28 +30,53 @@ function rowKeyGetter(row: Row) {
   return row.id;
 }
 
-faker.locale = 'en_GB';
+faker.locale = "en_GB";
+
+const ApexRDGCheckbox: Column<any, any> = {
+  ...SelectColumn,
+  frozen: true,
+  headerRenderer() {
+    return <div>SELECT</div>;
+  },
+  formatter(props) {
+    return (
+      <SelectCellFormatter
+        aria-label="Select"
+        tabIndex={-1}
+        isCellSelected={false}
+        // isCellSelected={props.isCellSelected}
+        // value={props.isRowSelected}
+        value={false}
+        onClick={(e) => e.stopPropagation()}
+        onChange={props.onRowSelectionChange}
+        // onChange={(value: boolean, isShiftClick: boolean) =>
+        //   console.log("A change")
+        // }
+      />
+    );
+  },
+};
 
 const columns: readonly Column<Row>[] = [
-  SelectColumn,
   {
-    key: 'id',
-    name: 'ID',
+    key: "id",
+    name: "ID",
     width: 80,
     resizable: true,
-    frozen: true
+    frozen: true,
   },
+  ApexRDGCheckbox,
   {
-    key: 'avatar',
-    name: 'Avatar',
+    key: "avatar",
+    name: "Avatar",
     width: 40,
     resizable: true,
     headerRenderer: () => <ImageFormatter value={faker.image.cats()} />,
-    formatter: ({ row }) => <ImageFormatter value={row.avatar} />
+    formatter: ({ row }) => <ImageFormatter value={row.avatar} />,
   },
   {
-    key: 'title',
-    name: 'Title',
+    key: "title",
+    name: "Title",
     width: 200,
     resizable: true,
     formatter(props) {
@@ -57,86 +84,87 @@ const columns: readonly Column<Row>[] = [
     },
     editor: DropDownEditor,
     editorOptions: {
-      editOnClick: true
-    }
+      editOnClick: true,
+    },
   },
   {
-    key: 'firstName',
-    name: 'First Name',
+    key: "firstName",
+    name: "First Name",
     width: 200,
     resizable: true,
     frozen: true,
-    editor: TextEditor
+    editor: TextEditor,
   },
   {
-    key: 'lastName',
-    name: 'Last Name',
+    key: "lastName",
+    name: "Last Name",
     width: 200,
     resizable: true,
     frozen: true,
-    editor: TextEditor
+    editor: TextEditor,
   },
   {
-    key: 'email',
-    name: 'Email',
+    key: "email",
+    name: "Email",
     width: 200,
     resizable: true,
-    editor: TextEditor
+    editor: TextEditor,
   },
   {
-    key: 'street',
-    name: 'Street',
+    key: "street",
+    name: "Street",
     width: 200,
     resizable: true,
-    editor: TextEditor
+    editor: TextEditor,
   },
   {
-    key: 'zipCode',
-    name: 'ZipCode',
+    key: "zipCode",
+    name: "ZipCode",
     width: 200,
     resizable: true,
-    editor: TextEditor
+    editor: TextEditor,
   },
   {
-    key: 'date',
-    name: 'Date',
+    key: "date",
+    name: "Date",
     width: 200,
     resizable: true,
-    editor: TextEditor
+    editor: TextEditor,
   },
   {
-    key: 'bs',
-    name: 'bs',
+    key: "bs",
+    name: "bs",
     width: 200,
     resizable: true,
-    editor: TextEditor
+    editor: TextEditor,
   },
   {
-    key: 'catchPhrase',
-    name: 'Catch Phrase',
+    key: "catchPhrase",
+    name: "Catch Phrase",
     width: 200,
     resizable: true,
-    editor: TextEditor
+    editor: TextEditor,
   },
   {
-    key: 'companyName',
-    name: 'Company Name',
+    key: "companyName",
+    name: "Company Name",
     width: 200,
     resizable: true,
-    editor: TextEditor
+    editor: TextEditor,
   },
   {
-    key: 'sentence',
-    name: 'Sentence',
+    key: "sentence",
+    name: "Sentence",
     width: 200,
     resizable: true,
-    editor: TextEditor
-  }
+    editor: TextEditor,
+  },
 ];
 
 function createFakeRowObjectData(index: number): Row {
   return {
-    id: `id_${index}`,
+    // id: `id_${index}`,
+    id: index,
     avatar: faker.image.avatar(),
     email: faker.internet.email(),
     title: faker.name.prefix(),
@@ -149,7 +177,7 @@ function createFakeRowObjectData(index: number): Row {
     catchPhrase: faker.company.catchPhrase(),
     companyName: faker.company.companyName(),
     words: faker.lorem.words(),
-    sentence: faker.lorem.sentence()
+    sentence: faker.lorem.sentence(),
   };
 }
 
@@ -169,7 +197,7 @@ function isAtBottom(event: React.UIEvent<HTMLDivElement>): boolean {
 }
 
 function loadMoreRows(newRowsCount: number, length: number): Promise<Row[]> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const newRows: Row[] = [];
 
     for (let i = 0; i < newRowsCount; i++) {
@@ -183,23 +211,42 @@ function loadMoreRows(newRowsCount: number, length: number): Promise<Row[]> {
 export function AllFeatures() {
   const [rows, setRows] = useState(() => createRows(2000));
   const [selectedRows, setSelectedRows] = useState(() => new Set<React.Key>());
+  const [sRow, setSRow] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const gridRef = useRef<DataGridHandle>(null);
 
-  function handleFill({ columnKey, sourceRow, targetRows }: FillEvent<Row>): Row[] {
-    return targetRows.map(row => ({ ...row, [columnKey as keyof Row]: sourceRow[columnKey as keyof Row] }));
+  function handleFill({
+    columnKey,
+    sourceRow,
+    targetRows,
+  }: FillEvent<Row>): Row[] {
+    return targetRows.map((row) => ({
+      ...row,
+      [columnKey as keyof Row]: sourceRow[columnKey as keyof Row],
+    }));
   }
 
-  function handlePaste({ sourceColumnKey, sourceRow, targetColumnKey, targetRow }: PasteEvent<Row>): Row {
-    const incompatibleColumns = ['email', 'zipCode', 'date'];
+  function handlePaste({
+    sourceColumnKey,
+    sourceRow,
+    targetColumnKey,
+    targetRow,
+  }: PasteEvent<Row>): Row {
+    const incompatibleColumns = ["email", "zipCode", "date"];
     if (
-      sourceColumnKey === 'avatar'
-      || ['id', 'avatar'].includes(targetColumnKey)
-      || ((incompatibleColumns.includes(targetColumnKey) || incompatibleColumns.includes(sourceColumnKey)) && sourceColumnKey !== targetColumnKey)) {
+      sourceColumnKey === "avatar" ||
+      ["id", "avatar"].includes(targetColumnKey) ||
+      ((incompatibleColumns.includes(targetColumnKey) ||
+        incompatibleColumns.includes(sourceColumnKey)) &&
+        sourceColumnKey !== targetColumnKey)
+    ) {
       return targetRow;
     }
 
-    return { ...targetRow, [targetColumnKey]: sourceRow[sourceColumnKey as keyof Row] };
+    return {
+      ...targetRow,
+      [targetColumnKey]: sourceRow[sourceColumnKey as keyof Row],
+    };
   }
 
   async function handleScroll(event: React.UIEvent<HTMLDivElement>) {
@@ -220,18 +267,23 @@ export function AllFeatures() {
         columns={columns}
         rows={rows}
         rowKeyGetter={rowKeyGetter}
-        onRowsChange={setRows}
         onFill={handleFill}
         onPaste={handlePaste}
         rowHeight={30}
-        selectedRows={selectedRows}
         onScroll={handleScroll}
+        // rowClass={(row) => (row.id.includes("7") ? "highlight" : undefined)}
+        rowClass={(row) => (row.id === 7 ? "highlight" : undefined)}
+        selectedRows={selectedRows}
         onSelectedRowsChange={setSelectedRows}
-        rowClass={row => row.id.includes('7') ? 'highlight' : undefined}
+        selectedRow={sRow}
+        onSelectedRowChange={setSRow}
+        onRowsChange={setRows}
       />
-      {isLoading && <div className="load-more-rows-tag">Loading more rows...</div>}
+      {isLoading && (
+        <div className="load-more-rows-tag">Loading more rows...</div>
+      )}
     </div>
   );
 }
 
-AllFeatures.storyName = 'All Features';
+AllFeatures.storyName = "All Features";

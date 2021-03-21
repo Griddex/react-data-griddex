@@ -28,17 +28,21 @@
 
 .rdg-checkbox {
   content: '';
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--border-color);
-  background-color: var(--background-color);
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--checkbox-border-color);
+  // background-color: var(--background-color);
+
 
   .rdg-checkbox-input:checked + & {
+    border-color: #1DA756;
+    // border-color: var(--checkbox-focus-color);
     background-color: var(--checkbox-color);
-    box-shadow: inset 0px 0px 0px 4px var(--background-color);
+    box-shadow: inset 0px 0px 0px 4px var(--checkbox-color);
   }
 
   .rdg-checkbox-input:focus + & {
     border-color: var(--checkbox-focus-color);
+    // border-color: "red";
   }
 }

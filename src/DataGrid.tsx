@@ -103,6 +103,11 @@ export interface DataGridProps<R, SR = unknown> extends SharedDivProps {
   /**
    * Feature props
    */
+  /** Single row serial number */
+  selectedRow?: number;
+  /** Function called whenever row selection is changed */
+  onSelectedRowChange?: (selectedRows: number) => void;
+  /** The key of the column which is currently being sorted */
   /** Set of selected row keys */
   selectedRows?: ReadonlySet<React.Key>;
   /** Function called whenever row selection is changed */
@@ -183,6 +188,8 @@ function DataGrid<R, SR>(
     headerRowHeight = rowHeight,
     headerFiltersHeight = 45,
     // Feature props
+    selectedRow,
+    onSelectedRowChange,
     selectedRows,
     onSelectedRowsChange,
     sortColumn,
@@ -269,8 +276,10 @@ function DataGrid<R, SR>(
     headerRowHeight + (enableFilterRow ? headerFiltersHeight : 0);
   const clientHeight =
     gridHeight - totalHeaderHeight - summaryRowsCount * rowHeight;
-  const isSelectable =
-    selectedRows !== undefined && onSelectedRowsChange !== undefined;
+  // const isSelectable =
+  //   selectedRows !== undefined && onSelectedRowsChange !== undefined;
+  const isRowSelectable =
+    selectedRow !== undefined && onSelectedRowChange !== undefined;
 
   const {
     columns,
@@ -369,6 +378,7 @@ function DataGrid<R, SR>(
    */
   function selectRow({ rowIdx, checked, isShiftClick }: SelectRowEvent) {
     if (!onSelectedRowsChange) return;
+    if (!onSelectedRowChange) return;
 
     assertIsValidKeyGetter(rowKeyGetter);
     const newSelectedRows = new Set(selectedRows);
@@ -387,6 +397,7 @@ function DataGrid<R, SR>(
     }
 
     const rowKey = rowKeyGetter(row);
+
     if (checked) {
       newSelectedRows.add(rowKey);
       const previousRowIdx = lastSelectedRowIdx.current;
@@ -405,6 +416,28 @@ function DataGrid<R, SR>(
     }
 
     onSelectedRowsChange(newSelectedRows);
+
+    //Modified for single row selection
+    let newSlctRow;
+    if (checked) {
+      newSelectedRows.add(rowKey);
+      const previousRowIdx = lastSelectedRowIdx.current;
+      lastSelectedRowIdx.current = rowIdx;
+
+      if (isShiftClick && previousRowIdx !== -1 && previousRowIdx !== rowIdx) {
+        const step = Math.sign(rowIdx - previousRowIdx);
+        for (let i = previousRowIdx + step; i !== rowIdx; i += step) {
+          const row = rows[i];
+          if (isGroupRow(row)) continue;
+          newSlctRow = rowKeyGetter(row);
+        }
+      }
+      newSlctRow = rowKeyGetter(row);
+    } else {
+      lastSelectedRowIdx.current = -1;
+    }
+
+    onSelectedRowChange && onSelectedRowChange(newSlctRow as number);
   }
 
   function toggleGroup(expandedGroupId: unknown) {
@@ -929,9 +962,13 @@ function DataGrid<R, SR>(
                 : undefined
             }
             isRowSelected={
-              isSelectable &&
-              row.childRows.every((cr) => selectedRows?.has(rowKeyGetter!(cr)))
+              isRowSelectable &&
+              row.childRows.every((cr) => rowKeyGetter!(cr) === selectedRow)
             }
+            // isRowSelected={
+            //   isSelectable &&
+            //   row.childRows.every((cr) => selectedRows?.has(rowKeyGetter!(cr)))
+            // }
             onFocus={
               selectedPosition.rowIdx === rowIdx ? handleFocus : undefined
             }
@@ -951,7 +988,8 @@ function DataGrid<R, SR>(
       let isRowSelected = false;
       if (typeof rowKeyGetter === "function") {
         key = rowKeyGetter(row);
-        isRowSelected = selectedRows?.has(key) ?? false;
+        // isRowSelected = selectedRows?.has(key) ?? false;
+        isRowSelected = selectedRow === key ? true : false;
       }
 
       rowElements.push(
@@ -959,7 +997,8 @@ function DataGrid<R, SR>(
           aria-rowindex={
             headerRowsCount + (hasGroups ? startRowIndex : rowIdx) + 1
           } // aria-rowindex is 1 based
-          aria-selected={isSelectable ? isRowSelected : undefined}
+          // aria-selected={isSelectable ? isRowSelected : undefined}
+          aria-selected={isRowSelectable ? isRowSelected : undefined}
           key={key}
           rowIdx={rowIdx}
           row={row}
@@ -1009,7 +1048,7 @@ function DataGrid<R, SR>(
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
       aria-describedby={ariaDescribedBy}
-      aria-multiselectable={isSelectable ? true : undefined}
+      // aria-multiselectable={isSelectable ? true : undefined}
       aria-colcount={columns.length}
       aria-rowcount={headerRowsCount + rowsCount + summaryRowsCount}
       className={clsx(
@@ -1035,7 +1074,7 @@ function DataGrid<R, SR>(
         columns={viewportColumns}
         onColumnResize={handleColumnResize}
         allRowsSelected={selectedRows?.size === rawRows.length}
-        onSelectedRowsChange={onSelectedRowsChange}
+        onSelectedRowsChange={onSelectedRowsChange} //There's nothing to select all rows
         sortColumn={sortColumn}
         sortDirection={sortDirection}
         onSort={onSort}

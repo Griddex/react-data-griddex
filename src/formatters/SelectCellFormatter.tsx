@@ -1,13 +1,10 @@
-import clsx from 'clsx';
+import clsx from "clsx";
 
-import { useFocusRef } from '../hooks/useFocusRef';
+import { useFocusRef } from "../hooks/useFocusRef";
 
-type SharedInputProps = Pick<React.InputHTMLAttributes<HTMLInputElement>,
-  | 'disabled'
-  | 'tabIndex'
-  | 'onClick'
-  | 'aria-label'
-  | 'aria-labelledby'
+type SharedInputProps = Pick<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "disabled" | "tabIndex" | "onClick" | "aria-label" | "aria-labelledby"
 >;
 
 interface SelectCellFormatterProps extends SharedInputProps {
@@ -23,8 +20,8 @@ export function SelectCellFormatter({
   disabled,
   onClick,
   onChange,
-  'aria-label': ariaLabel,
-  'aria-labelledby': ariaLabelledBy
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
 }: SelectCellFormatterProps) {
   const inputRef = useFocusRef<HTMLInputElement>(isCellSelected);
 
@@ -33,14 +30,18 @@ export function SelectCellFormatter({
   }
 
   return (
-    <label className={clsx('rdg-checkbox-label', { 'rdg-checkbox-label-disabled': disabled })}>
+    <label
+      className={clsx("rdg-checkbox-label", {
+        "rdg-checkbox-label-disabled": disabled,
+      })}
+    >
       <input
+        className="rdg-checkbox-input"
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         tabIndex={tabIndex}
         ref={inputRef}
         type="checkbox"
-        className="rdg-checkbox-input"
         disabled={disabled}
         checked={value}
         onChange={handleChange}

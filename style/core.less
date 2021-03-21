@@ -1,6 +1,6 @@
 .lightTheme() {
   @bg: #fff;
-  @selectedRow: #dbecfa;
+  @selectedRow: #EDFBFD;
   --color: #000;
   --border-color: #ddd;
   --summary-border-color: #aaa;
@@ -10,15 +10,16 @@
   --row-selected-background-color: @selectedRow;
   --row-selected-hover-background-color: darken(@selectedRow, 4%);
 
-  --checkbox-color: #005295;
-  --checkbox-focus-color: lighten(#005295, 40%);
+  --checkbox-color: #0A515C;
+  --checkbox-border-color:rgba(0, 0, 0, 0.54);
+  --checkbox-focus-color: lighten(#0A515C, 40%);
   --checkbox-disabled-border-color: #ccc;
   --checkbox-disabled-background-color: #ddd;
 }
 
 .darkTheme() {
   @bg: #222;
-  @selectedRow: darken(#dbecfa, 50%);
+  @selectedRow: darken(#EDFBFD, 50%);
   --color: #ddd;
   --border-color: #444;
   --summary-border-color: #555;
@@ -28,15 +29,15 @@
   --row-selected-background-color: @selectedRow;
   --row-selected-hover-background-color: darken(@selectedRow, 4%);
 
-  --checkbox-color: lighten(#005295, 50%);
-  --checkbox-focus-color: lighten(#005295, 60%);
+  --checkbox-color: lighten(#0A515C, 50%);
+  --checkbox-focus-color: lighten(#0A515C, 60%);
   --checkbox-disabled-border-color: #000;
   --checkbox-disabled-background-color: #333;
 }
 
 .rdg {
   .lightTheme();
-  --selection-color: #66afe9;
+  --selection-color: #14A9C1;
   --font-size: 14px;
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context

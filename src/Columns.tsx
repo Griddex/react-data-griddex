@@ -1,13 +1,14 @@
-import { SelectCellFormatter } from './formatters';
-import type { Column } from './types';
-import { stopPropagation } from './utils/domUtils';
+import { SelectCellFormatter } from "./formatters";
+import type { Column } from "./types";
+import { stopPropagation } from "./utils/domUtils";
 
-export const SELECT_COLUMN_KEY = 'select-row';
+export const SELECT_COLUMN_KEY = "select-row";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const SelectColumn: Column<any, any> = {
-  key: SELECT_COLUMN_KEY,
-  name: '',
+  // key: SELECT_COLUMN_KEY,
+  key: "SELECT_CONTROL_KEY",
+  name: "",
   width: 35,
   maxWidth: 35,
   resizable: false,
@@ -27,7 +28,8 @@ export const SelectColumn: Column<any, any> = {
       <SelectCellFormatter
         aria-label="Select"
         tabIndex={-1}
-        isCellSelected={props.isCellSelected}
+        isCellSelected={false}
+        // isCellSelected={props.isCellSelected}
         value={props.isRowSelected}
         onClick={stopPropagation}
         onChange={props.onRowSelectionChange}
@@ -46,5 +48,5 @@ export const SelectColumn: Column<any, any> = {
         onClick={stopPropagation}
       />
     );
-  }
+  },
 };
