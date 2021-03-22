@@ -7,10 +7,6 @@ export * from './formatters';
 export { default as TextEditor } from './editors/TextEditor';
 export { default as SortableHeaderCell } from './headerCells/SortableHeaderCell';
 export type {
-  CellNavigationMode,
-  SortDirection
-} from './enums';
-export type {
   Column,
   CalculatedColumn,
   FormatterProps,
@@ -22,7 +18,10 @@ export type {
   RowRendererProps,
   FilterRendererProps,
   Filters,
+  RowsChangeData,
   SelectRowEvent,
   FillEvent,
-  PasteEvent
+  PasteEvent,
+  CellNavigationMode,
+  SortDirection
 } from './types';

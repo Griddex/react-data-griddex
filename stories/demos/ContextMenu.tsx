@@ -1,11 +1,15 @@
-import { useState, useReducer } from 'react';
-import { createPortal } from 'react-dom';
-import faker from 'faker';
-import { ContextMenu, MenuItem, SubMenu, ContextMenuTrigger } from 'react-contextmenu';
+import { useState, useReducer } from "react";
+import { createPortal } from "react-dom";
+import faker from "faker";
+import {
+  ContextMenu,
+  MenuItem,
+  SubMenu,
+  ContextMenuTrigger,
+} from "react-contextmenu";
 
-import DataGrid, { Row as GridRow } from '../../src';
-import type { Column, RowRendererProps } from '../../src';
-import './react-contextmenu.less';
+import DataGrid, { Row as GridRow } from "../../src";
+import type { Column, RowRendererProps } from "../../src";
 
 interface Row {
   id: number;
@@ -19,16 +23,16 @@ function createRows(): Row[] {
     rows.push({
       id: i,
       product: faker.commerce.productName(),
-      price: faker.commerce.price()
+      price: faker.commerce.price(),
     });
   }
   return rows;
 }
 
 const columns: readonly Column<Row>[] = [
-  { key: 'id', name: 'ID' },
-  { key: 'product', name: 'Product' },
-  { key: 'price', name: 'Price' }
+  { key: "id", name: "ID" },
+  { key: "product", name: "Product" },
+  { key: "price", name: "Price" },
 ];
 
 function rowKeyGetter(row: Row) {
@@ -37,7 +41,10 @@ function rowKeyGetter(row: Row) {
 
 function RowRenderer(props: RowRendererProps<Row>) {
   return (
-    <ContextMenuTrigger id="grid-context-menu" collect={() => ({ rowIdx: props.rowIdx })}>
+    <ContextMenuTrigger
+      id="grid-context-menu"
+      collect={() => ({ rowIdx: props.rowIdx })}
+    >
       <GridRow {...props} />
     </ContextMenuTrigger>
   );
@@ -45,20 +52,29 @@ function RowRenderer(props: RowRendererProps<Row>) {
 
 export function ContextMenuStory() {
   const [rows, setRows] = useState(createRows);
-  const [nextId, setNextId] = useReducer((id: number) => id + 1, rows[rows.length - 1].id + 1);
+  const [nextId, setNextId] = useReducer(
+    (id: number) => id + 1,
+    rows[rows.length - 1].id + 1
+  );
 
-  function onRowDelete(e: React.MouseEvent<HTMLDivElement>, { rowIdx }: { rowIdx: number }) {
-    setRows([
-      ...rows.slice(0, rowIdx),
-      ...rows.slice(rowIdx + 1)
-    ]);
+  function onRowDelete(
+    e: React.MouseEvent<HTMLDivElement>,
+    { rowIdx }: { rowIdx: number }
+  ) {
+    setRows([...rows.slice(0, rowIdx), ...rows.slice(rowIdx + 1)]);
   }
 
-  function onRowInsertAbove(e: React.MouseEvent<HTMLDivElement>, { rowIdx }: { rowIdx: number }) {
+  function onRowInsertAbove(
+    e: React.MouseEvent<HTMLDivElement>,
+    { rowIdx }: { rowIdx: number }
+  ) {
     insertRow(rowIdx);
   }
 
-  function onRowInsertBelow(e: React.MouseEvent<HTMLDivElement>, { rowIdx }: { rowIdx: number }) {
+  function onRowInsertBelow(
+    e: React.MouseEvent<HTMLDivElement>,
+    { rowIdx }: { rowIdx: number }
+  ) {
     insertRow(rowIdx + 1);
   }
 
@@ -66,13 +82,13 @@ export function ContextMenuStory() {
     const newRow: Row = {
       id: nextId,
       product: faker.commerce.productName(),
-      price: faker.commerce.price()
+      price: faker.commerce.price(),
     };
 
     setRows([
       ...rows.slice(0, insertRowIdx),
       newRow,
-      ...rows.slice(insertRowIdx)
+      ...rows.slice(insertRowIdx),
     ]);
     setNextId();
   }
@@ -100,4 +116,4 @@ export function ContextMenuStory() {
   );
 }
 
-ContextMenuStory.storyName = 'Context Menu';
+ContextMenuStory.storyName = "Context Menu";

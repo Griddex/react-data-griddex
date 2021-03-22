@@ -6,7 +6,6 @@ export const SELECT_COLUMN_KEY = "select-row";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const SelectColumn: Column<any, any> = {
-  // key: SELECT_COLUMN_KEY,
   key: "SELECT_CONTROL_KEY",
   name: "",
   width: 35,
@@ -24,6 +23,10 @@ export const SelectColumn: Column<any, any> = {
     );
   },
   formatter(props) {
+    console.log(
+      "Logged output --> ~ file: Columns.tsx ~ line 33 ~ formatter ~ props.isRowSelected",
+      props.isRowSelected
+    );
     return (
       <SelectCellFormatter
         aria-label="Select"

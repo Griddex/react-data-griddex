@@ -6,8 +6,6 @@ import DropDownEditor from "./components/Editors/DropDownEditor";
 import { ImageFormatter } from "./components/Formatters";
 import { SelectCellFormatter } from "../../src/formatters";
 
-import "./AllFeatures.less";
-
 export interface Row {
   // id: string;
   id: number;
@@ -46,7 +44,7 @@ const ApexRDGCheckbox: Column<any, any> = {
         isCellSelected={false}
         // isCellSelected={props.isCellSelected}
         // value={props.isRowSelected}
-        value={false}
+        value={props.isRowSelected}
         onClick={(e) => e.stopPropagation()}
         onChange={props.onRowSelectionChange}
         // onChange={(value: boolean, isShiftClick: boolean) =>

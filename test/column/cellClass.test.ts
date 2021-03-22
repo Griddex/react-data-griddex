@@ -1,5 +1,6 @@
 import type { Column } from '../../src';
 import { setup, getCells } from '../utils';
+import { cellClassname } from '../../src/style';
 
 interface Row {
   id: number;
@@ -10,13 +11,12 @@ const rows: readonly Row[] = [{ id: 0 }, { id: 1 }];
 test('cellClass is undefined', () => {
   const columns: readonly Column<Row>[] = [{
     key: 'id',
-    name: 'ID',
-    cellClass: undefined
+    name: 'ID'
   }];
   setup({ columns, rows });
   const [cell1, cell2] = getCells();
-  expect(cell1).toHaveClass('rdg-cell', { exact: true });
-  expect(cell2).toHaveClass('rdg-cell', { exact: true });
+  expect(cell1).toHaveClass(cellClassname, { exact: true });
+  expect(cell2).toHaveClass(cellClassname, { exact: true });
 });
 
 test('cellClass is a string', () => {
@@ -27,8 +27,8 @@ test('cellClass is a string', () => {
   }];
   setup({ columns, rows });
   const [cell1, cell2] = getCells();
-  expect(cell1).toHaveClass('rdg-cell my-cell', { exact: true });
-  expect(cell2).toHaveClass('rdg-cell my-cell', { exact: true });
+  expect(cell1).toHaveClass(`${cellClassname} my-cell`, { exact: true });
+  expect(cell2).toHaveClass(`${cellClassname} my-cell`, { exact: true });
 });
 
 test('cellClass returns a string', () => {
@@ -39,8 +39,8 @@ test('cellClass returns a string', () => {
   }];
   setup({ columns, rows });
   const [cell1, cell2] = getCells();
-  expect(cell1).toHaveClass('rdg-cell my-cell-0', { exact: true });
-  expect(cell2).toHaveClass('rdg-cell my-cell-1', { exact: true });
+  expect(cell1).toHaveClass(`${cellClassname} my-cell-0`, { exact: true });
+  expect(cell2).toHaveClass(`${cellClassname} my-cell-1`, { exact: true });
 });
 
 test('cellClass returns undefined', () => {
@@ -51,6 +51,6 @@ test('cellClass returns undefined', () => {
   }];
   setup({ columns, rows });
   const [cell1, cell2] = getCells();
-  expect(cell1).toHaveClass('rdg-cell', { exact: true });
-  expect(cell2).toHaveClass('rdg-cell', { exact: true });
+  expect(cell1).toHaveClass(cellClassname, { exact: true });
+  expect(cell2).toHaveClass(cellClassname, { exact: true });
 });

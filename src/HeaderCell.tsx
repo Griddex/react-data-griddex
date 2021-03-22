@@ -1,9 +1,23 @@
-import clsx from 'clsx';
+import { css } from '@linaria/core';
 
-import type { CalculatedColumn } from './types';
+import type { CalculatedColumn, SortDirection } from './types';
 import type { HeaderRowProps } from './HeaderRow';
 import SortableHeaderCell from './headerCells/SortableHeaderCell';
-import type { SortDirection } from './enums';
+import { getCellStyle, getCellClassname } from './utils';
+
+const cellResizable = css`
+  &::after {
+    content: "";
+    cursor: col-resize;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 10px;
+  }
+`;
+
+const cellResizableClassname = `rdg-cell-resizable ${cellResizable}`;
 
 function getAriaSort(sortDirection?: SortDirection) {
   switch (sortDirection) {
@@ -104,15 +118,9 @@ export default function HeaderCell<R, SR>({
     return column.name;
   }
 
-  const className = clsx('rdg-cell', column.headerCellClass, {
-    'rdg-cell-resizable': column.resizable,
-    'rdg-cell-frozen': column.frozen,
-    'rdg-cell-frozen-last': column.isLastFrozenColumn
+  const className = getCellClassname(column, column.headerCellClass, {
+    [cellResizableClassname]: column.resizable
   });
-  const style: React.CSSProperties = {
-    width: column.width,
-    left: column.left
-  };
 
   return (
     <div
@@ -120,7 +128,7 @@ export default function HeaderCell<R, SR>({
       aria-colindex={column.idx + 1}
       aria-sort={sortColumn === column.key ? getAriaSort(sortDirection) : undefined}
       className={className}
-      style={style}
+      style={getCellStyle(column)}
       onPointerDown={column.resizable ? onPointerDown : undefined}
     >
       {getCell()}

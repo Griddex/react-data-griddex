@@ -1,8 +1,16 @@
 import { useState, useCallback } from 'react';
-import clsx from 'clsx';
+import { css } from '@linaria/core';
 
+import { cellSelectedClassname } from './style';
 import EditorContainer from './editors/EditorContainer';
+import { getCellStyle, getCellClassname } from './utils';
 import type { CellRendererProps, SharedEditorProps, Omit } from './types';
+
+const cellEditing = css`
+  padding: 0;
+`;
+
+const cellEditingClassname = `rdg-cell-editing ${cellEditing}`;
 
 type SharedCellRendererProps<R, SR> = Pick<CellRendererProps<R, SR>,
   | 'rowIdx'
@@ -32,14 +40,10 @@ export default function EditCell<R, SR>({
   }, []);
 
   const { cellClass } = column;
-  className = clsx(
-    'rdg-cell',
-    {
-      'rdg-cell-frozen': column.frozen,
-      'rdg-cell-frozen-last': column.isLastFrozenColumn
-    },
-    'rdg-cell-selected',
-    'rdg-cell-editing',
+  className = getCellClassname(
+    column,
+    cellSelectedClassname,
+    cellEditingClassname,
     typeof cellClass === 'function' ? cellClass(row) : cellClass,
     className
   );
@@ -69,10 +73,7 @@ export default function EditCell<R, SR>({
       aria-selected
       ref={cellRef}
       className={className}
-      style={{
-        width: column.width,
-        left: column.left
-      }}
+      style={getCellStyle(column)}
       {...props}
     >
       {getCellContent()}

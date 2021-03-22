@@ -1,17 +1,26 @@
-import type { HeaderCellProps } from '../HeaderCell';
-import type { SortDirection } from '../enums';
+import { css } from "@linaria/core";
+import type { HeaderCellProps } from "../HeaderCell";
+import type { SortDirection } from "../types";
 
-const SORT_TEXT = {
-  ASC: '\u25B2',
-  DESC: '\u25BC',
-  NONE: ''
-} as const;
+const headerSortCell = css`
+  cursor: pointer;
+  display: flex;
+`;
 
-type SharedHeaderCellProps<R, SR> = Pick<HeaderCellProps<R, SR>,
-  | 'column'
-  | 'sortColumn'
-  | 'sortDirection'
-  | 'onSort'
+const headerSortCellClassname = `rdg-header-sort-cell ${headerSortCell}`;
+
+const headerSortName = css`
+  flex-grow: 1;
+  overflow: hidden;
+  overflow: clip;
+  text-overflow: ellipsis;
+`;
+
+const headerSortNameClassname = `rdg-header-sort-name ${headerSortName}`;
+
+type SharedHeaderCellProps<R, SR> = Pick<
+  HeaderCellProps<R, SR>,
+  "column" | "sortColumn" | "sortDirection" | "onSort"
 >;
 
 interface Props<R, SR> extends SharedHeaderCellProps<R, SR> {
@@ -23,31 +32,38 @@ export default function SortableHeaderCell<R, SR>({
   onSort,
   sortColumn,
   sortDirection,
-  children
+  children,
 }: Props<R, SR>) {
-  sortDirection = sortColumn === column.key && sortDirection || 'NONE';
+  sortDirection = (sortColumn === column.key && sortDirection) || "NONE";
+  let sortText = "";
+  if (sortDirection === "ASC") {
+    sortText = "\u25B2";
+  } else if (sortDirection === "DESC") {
+    sortText = "\u25BC";
+  }
+
   function onClick() {
     if (!onSort) return;
     const { sortDescendingFirst } = column;
     let direction: SortDirection;
     switch (sortDirection) {
-      case 'ASC':
-        direction = sortDescendingFirst ? 'NONE' : 'DESC';
+      case "ASC":
+        direction = sortDescendingFirst ? "NONE" : "DESC";
         break;
-      case 'DESC':
-        direction = sortDescendingFirst ? 'ASC' : 'NONE';
+      case "DESC":
+        direction = sortDescendingFirst ? "ASC" : "NONE";
         break;
       default:
-        direction = sortDescendingFirst ? 'DESC' : 'ASC';
+        direction = sortDescendingFirst ? "DESC" : "ASC";
         break;
     }
     onSort(column.key, direction);
   }
 
   return (
-    <span className="rdg-header-sort-cell" onClick={onClick}>
-      <span className="rdg-header-sort-name">{children}</span>
-      <span>{SORT_TEXT[sortDirection]}</span>
+    <span className={headerSortCellClassname} onClick={onClick}>
+      <span className={headerSortNameClassname}>{children}</span>
+      <span>{sortText}</span>
     </span>
   );
 }

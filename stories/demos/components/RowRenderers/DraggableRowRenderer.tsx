@@ -1,12 +1,19 @@
-import { useDrag, useDrop } from 'react-dnd';
-import type { DragObjectWithType } from 'react-dnd';
-import clsx from 'clsx';
+import { useDrag, useDrop } from "react-dnd";
+import type { DragObjectWithType } from "react-dnd";
+import clsx from "clsx";
+import { css } from "@linaria/core";
 
-import { Row } from '../../../../src';
-import type { RowRendererProps } from '../../../../src';
-import { useCombinedRefs } from '../../../../src/hooks';
+import { Row } from "../../../../src";
+import type { RowRendererProps } from "../../../../src";
+import { useCombinedRefs } from "../../../useCombinedRefs";
 
-import './DraggableRowRenderer.less';
+const rowDraggingClassname = css`
+  opacity: 0.5;
+`;
+
+const rowOverClassname = css`
+  background-color: #ececec;
+`;
 
 interface RowDragObject extends DragObjectWithType {
   index: number;
@@ -24,32 +31,29 @@ export function DraggableRowRenderer<R, SR = unknown>({
   ...props
 }: DraggableRowRenderProps<R, SR>) {
   const [{ isDragging }, drag] = useDrag({
-    item: { index: rowIdx, type: 'ROW_DRAG' },
-    collect: monitor => ({
-      isDragging: monitor.isDragging()
-    })
+    item: { index: rowIdx, type: "ROW_DRAG" },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
   });
 
   const [{ isOver }, drop] = useDrop({
-    accept: 'ROW_DRAG',
+    accept: "ROW_DRAG",
     drop({ index, type }: RowDragObject) {
-      if (type === 'ROW_DRAG') {
+      if (type === "ROW_DRAG") {
         onRowReorder(index, rowIdx);
       }
     },
-    collect: monitor => ({
+    collect: (monitor) => ({
       isOver: monitor.isOver(),
-      canDrop: monitor.canDrop()
-    })
+      canDrop: monitor.canDrop(),
+    }),
   });
 
-  className = clsx(
-    className,
-    {
-      'rdg-row-dragging': isDragging,
-      'rdg-row-over': isOver
-    }
-  );
+  className = clsx(className, {
+    [rowDraggingClassname]: isDragging,
+    [rowOverClassname]: isOver,
+  });
 
   return (
     <Row

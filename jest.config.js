@@ -2,18 +2,11 @@
 // https://jestjs.io/docs/en/configuration.html
 
 export default {
-  coverageProvider: 'v8',
-  collectCoverageFrom: [
-    'src/**/*.{ts,tsx}'
-  ],
-  coverageReporters: [
-    'text'
-  ],
+  coverageProvider: "v8",
+  collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/types.ts"],
+  coverageReporters: ["text"],
   restoreMocks: true,
-  setupFilesAfterEnv: [
-    '@testing-library/jest-dom'
-  ],
-  testMatch: [
-    '<rootDir>/test/**/*.test.*'
-  ]
+  setupFiles: ["./test/setup.ts"],
+  setupFilesAfterEnv: ["@testing-library/jest-dom"],
+  testMatch: ["<rootDir>/test/**/*.test.*"],
 };

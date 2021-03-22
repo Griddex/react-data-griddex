@@ -1,13 +1,15 @@
-import { useState, useMemo } from 'react';
-import { groupBy as rowGrouper } from 'lodash';
-import Select, { components } from 'react-select';
-import type { ValueType, OptionsType, Props as SelectProps } from 'react-select';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import faker from 'faker';
-
-import DataGrid, { SelectColumn } from '../../src';
-import type { Column } from '../../src';
-import './Grouping.less';
+import { useState, useMemo } from "react";
+import { groupBy as rowGrouper } from "lodash";
+import Select, { components } from "react-select";
+import type {
+  ValueType,
+  OptionsType,
+  Props as SelectProps,
+} from "react-select";
+import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import faker from "faker";
+import DataGrid, { SelectColumn } from "../../src";
+import type { Column } from "../../src";
 
 interface Row {
   id: number;
@@ -25,57 +27,93 @@ interface Option {
   label: string;
 }
 
-const sports = ['Swimming', 'Gymnastics', 'Speed Skating', 'Cross Country Skiing', 'Short-Track Speed Skating', 'Diving', 'Cycling', 'Biathlon', 'Alpine Skiing', 'Ski Jumping', 'Nordic Combined', 'Athletics', 'Table Tennis', 'Tennis', 'Synchronized Swimming', 'Shooting', 'Rowing', 'Fencing', 'Equestrian', 'Canoeing', 'Bobsleigh', 'Badminton', 'Archery', 'Wrestling', 'Weightlifting', 'Waterpolo', 'Wrestling', 'Weightlifting'];
+const sports = [
+  "Swimming",
+  "Gymnastics",
+  "Speed Skating",
+  "Cross Country Skiing",
+  "Short-Track Speed Skating",
+  "Diving",
+  "Cycling",
+  "Biathlon",
+  "Alpine Skiing",
+  "Ski Jumping",
+  "Nordic Combined",
+  "Athletics",
+  "Table Tennis",
+  "Tennis",
+  "Synchronized Swimming",
+  "Shooting",
+  "Rowing",
+  "Fencing",
+  "Equestrian",
+  "Canoeing",
+  "Bobsleigh",
+  "Badminton",
+  "Archery",
+  "Wrestling",
+  "Weightlifting",
+  "Waterpolo",
+  "Wrestling",
+  "Weightlifting",
+];
 
 const columns: readonly Column<Row>[] = [
   SelectColumn,
   {
-    key: 'country',
-    name: 'Country'
+    key: "country",
+    name: "Country",
   },
   {
-    key: 'year',
-    name: 'Year'
+    key: "year",
+    name: "Year",
   },
   {
-    key: 'sport',
-    name: 'Sport'
+    key: "sport",
+    name: "Sport",
   },
   {
-    key: 'athlete',
-    name: 'Athlete'
+    key: "athlete",
+    name: "Athlete",
   },
   {
-    key: 'gold',
-    name: 'Gold',
+    key: "gold",
+    name: "Gold",
     groupFormatter({ childRows }) {
       return <>{childRows.reduce((prev, { gold }) => prev + gold, 0)}</>;
-    }
+    },
   },
   {
-    key: 'silver',
-    name: 'Silver',
+    key: "silver",
+    name: "Silver",
     groupFormatter({ childRows }) {
       return <>{childRows.reduce((prev, { silver }) => prev + silver, 0)}</>;
-    }
+    },
   },
   {
-    key: 'bronze',
-    name: 'Bronze',
+    key: "bronze",
+    name: "Bronze",
     groupFormatter({ childRows }) {
       return <>{childRows.reduce((prev, { silver }) => prev + silver, 0)}</>;
-    }
+    },
   },
   {
-    key: 'total',
-    name: 'Total',
+    key: "total",
+    name: "Total",
     formatter({ row }) {
       return <>{row.gold + row.silver + row.bronze}</>;
     },
     groupFormatter({ childRows }) {
-      return <>{childRows.reduce((prev, row) => prev + row.gold + row.silver + row.bronze, 0)}</>;
-    }
-  }
+      return (
+        <>
+          {childRows.reduce(
+            (prev, row) => prev + row.gold + row.silver + row.bronze,
+            0
+          )}
+        </>
+      );
+    },
+  },
 ];
 
 function rowKeyGetter(row: Row) {
@@ -93,7 +131,7 @@ function createRows(): readonly Row[] {
       athlete: faker.name.findName(),
       gold: faker.random.number(5),
       silver: faker.random.number(5),
-      bronze: faker.random.number(5)
+      bronze: faker.random.number(5),
     });
   }
 
@@ -110,27 +148,52 @@ const SortableMultiValue = SortableElement((props: any) => {
   return <components.MultiValue {...props} innerProps={innerProps} />;
 });
 
+// @ts-expect-error
 const SortableSelect = SortableContainer<SelectProps<Option, true>>(Select);
 
 const options: OptionsType<Option> = [
-  { value: 'country', label: 'Country' },
-  { value: 'year', label: 'Year' },
-  { value: 'sport', label: 'Sport' },
-  { value: 'athlete', label: 'athlete' }
+  { value: "country", label: "Country" },
+  { value: "year", label: "Year" },
+  { value: "sport", label: "Sport" },
+  { value: "athlete", label: "athlete" },
 ];
 
 export function Grouping() {
   const [rows] = useState(createRows);
   const [selectedRows, setSelectedRows] = useState(() => new Set<React.Key>());
-  const [selectedOptions, setSelectedOptions] = useState<ValueType<Option, true>>([options[0], options[1]]);
-  const [expandedGroupIds, setExpandedGroupIds] = useState(() => new Set<unknown>(['United States of America', 'United States of America__2015']));
+  const [selectedOptions, setSelectedOptions] = useState<
+    ValueType<Option, true>
+  >([options[0], options[1]]);
+  const [expandedGroupIds, setExpandedGroupIds] = useState(
+    () =>
+      new Set<unknown>([
+        "United States of America",
+        "United States of America__2015",
+      ])
+  );
 
-  const groupBy = useMemo(() => Array.isArray(selectedOptions) ? selectedOptions.map((o: Option) => o.value) : undefined, [selectedOptions]);
+  const groupBy = useMemo(
+    () =>
+      Array.isArray(selectedOptions)
+        ? selectedOptions.map((o: Option) => o.value)
+        : undefined,
+    [selectedOptions]
+  );
 
-  function onSortEnd({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) {
+  function onSortEnd({
+    oldIndex,
+    newIndex,
+  }: {
+    oldIndex: number;
+    newIndex: number;
+  }) {
     if (!Array.isArray(selectedOptions)) return;
     const newOptions: Option[] = [...selectedOptions];
-    newOptions.splice(newIndex < 0 ? newOptions.length + newIndex : newIndex, 0, newOptions.splice(oldIndex, 1)[0]);
+    newOptions.splice(
+      newIndex < 0 ? newOptions.length + newIndex : newIndex,
+      0,
+      newOptions.splice(oldIndex, 1)[0]
+    );
     setSelectedOptions(newOptions);
     setExpandedGroupIds(new Set());
   }
@@ -148,13 +211,13 @@ export function Grouping() {
           // react-select props
           isMulti
           value={selectedOptions}
-          onChange={options => {
+          onChange={(options) => {
             setSelectedOptions(options);
             setExpandedGroupIds(new Set());
           }}
           options={options}
           components={{
-            MultiValue: SortableMultiValue
+            MultiValue: SortableMultiValue,
           }}
           closeMenuOnSelect={false}
         />
@@ -175,4 +238,4 @@ export function Grouping() {
   );
 }
 
-Grouping.storyName = 'Grouping';
+Grouping.storyName = "Grouping";

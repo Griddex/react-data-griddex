@@ -16,6 +16,11 @@ interface ViewportRowsArgs<R> {
   expandedGroupIds?: ReadonlySet<unknown>;
 }
 
+// https://github.com/microsoft/TypeScript/issues/41808
+function isReadonlyArray(arr: unknown): arr is readonly unknown[] {
+  return Array.isArray(arr);
+}
+
 export function useViewportRows<R>({
   rawRows,
   rowHeight,
@@ -25,10 +30,6 @@ export function useViewportRows<R>({
   rowGrouper,
   expandedGroupIds,
 }: ViewportRowsArgs<R>) {
-  const isGroupByDictionary = (prop: any): prop is GroupByDictionary<R> => {
-    return prop.childRows !== undefined;
-  };
-
   const [groupedRows, rowsCount] = useMemo(() => {
     if (groupBy.length === 0 || !rowGrouper) return [undefined, rawRows.length];
 
@@ -75,36 +76,35 @@ export function useViewportRows<R>({
       parentId: string | undefined,
       level: number
     ): void => {
-      if (!isGroupByDictionary(rows)) {
+      if (isReadonlyArray(rows)) {
         flattenedRows.push(...rows);
         return;
-      } else {
-        Object.keys(rows).forEach((groupKey, posInSet, keys) => {
-          // TODO: should users have control over the generated key?
-          const id =
-            parentId !== undefined ? `${parentId}__${groupKey}` : groupKey;
-          const isExpanded = expandedGroupIds?.has(id) ?? false;
-          const { childRows, childGroups, startRowIndex } = rows[groupKey];
-
-          const groupRow: GroupRow<R> = {
-            id,
-            parentId,
-            groupKey,
-            isExpanded,
-            childRows,
-            level,
-            posInSet,
-            startRowIndex,
-            setSize: keys.length,
-          };
-          flattenedRows.push(groupRow);
-          allGroupRows.add(groupRow);
-
-          if (isExpanded) {
-            expandGroup(childGroups, id, level + 1);
-          }
-        });
       }
+      Object.keys(rows).forEach((groupKey, posInSet, keys) => {
+        // TODO: should users have control over the generated key?
+        const id =
+          parentId !== undefined ? `${parentId}__${groupKey}` : groupKey;
+        const isExpanded = expandedGroupIds?.has(id) ?? false;
+        const { childRows, childGroups, startRowIndex } = rows[groupKey];
+
+        const groupRow: GroupRow<R> = {
+          id,
+          parentId,
+          groupKey,
+          isExpanded,
+          childRows,
+          level,
+          posInSet,
+          startRowIndex,
+          setSize: keys.length,
+        };
+        flattenedRows.push(groupRow);
+        allGroupRows.add(groupRow);
+
+        if (isExpanded) {
+          expandGroup(childGroups, id, level + 1);
+        }
+      });
     };
 
     expandGroup(groupedRows, undefined, 0);

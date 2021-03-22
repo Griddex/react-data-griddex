@@ -1,6 +1,60 @@
 import clsx from "clsx";
-
+import { css } from "@linaria/core";
 import { useFocusRef } from "../hooks/useFocusRef";
+
+const checkboxLabel = css`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin-right: 1px; // align checkbox in row group cell
+`;
+
+const checkboxLabelClassname = `rdg-checkbox-label ${checkboxLabel}`;
+
+const checkboxInput = css`
+  all: unset;
+  width: 0;
+  margin: 0;
+`;
+
+const checkboxInputClassname = `rdg-checkbox-input ${checkboxInput}`;
+
+const checkbox = css`
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border-color);
+  background-color: var(--background-color);
+
+  .${checkboxInput}:checked + & {
+    border-color: var(--checkbox-color);
+    background-color: var(--checkbox-color);
+  }
+
+  .${checkboxInput}:focus + & {
+    // border-color: var(--checkbox-focus-color);
+    border-color: var(--checkbox-color);
+  }
+`;
+
+const checkboxClassname = `rdg-checkbox ${checkbox}`;
+
+const checkboxLabelDisabled = css`
+  cursor: default;
+
+  .${checkbox} {
+    border-color: var(--checkbox-disabled-border-color);
+    background-color: var(--checkbox-disabled-background-color);
+  }
+`;
+
+const checkboxLabelDisabledClassname = `rdg-checkbox-label-disabled ${checkboxLabelDisabled}`;
 
 type SharedInputProps = Pick<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -23,6 +77,10 @@ export function SelectCellFormatter({
   "aria-label": ariaLabel,
   "aria-labelledby": ariaLabelledBy,
 }: SelectCellFormatterProps) {
+  console.log(
+    "Logged output --> ~ file: SelectCellFormatter.tsx ~ line 79 ~ value",
+    value
+  );
   const inputRef = useFocusRef<HTMLInputElement>(isCellSelected);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -31,23 +89,23 @@ export function SelectCellFormatter({
 
   return (
     <label
-      className={clsx("rdg-checkbox-label", {
-        "rdg-checkbox-label-disabled": disabled,
+      className={clsx(checkboxLabelClassname, {
+        [checkboxLabelDisabledClassname]: disabled,
       })}
     >
       <input
-        className="rdg-checkbox-input"
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         tabIndex={tabIndex}
         ref={inputRef}
         type="checkbox"
+        className={checkboxInputClassname}
         disabled={disabled}
         checked={value}
         onChange={handleChange}
         onClick={onClick}
       />
-      <div className="rdg-checkbox" />
+      <div className={checkboxClassname} />
     </label>
   );
 }

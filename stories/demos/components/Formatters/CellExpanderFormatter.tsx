@@ -1,5 +1,4 @@
-import { useFocusRef } from '../../../../src/hooks';
-import './CellExpanderFormatter.less';
+import { useFocusRef } from "../../../../src/hooks";
 
 export interface CellExpanderFormatterProps {
   isCellSelected: boolean;
@@ -7,7 +6,11 @@ export interface CellExpanderFormatterProps {
   onCellExpand: () => void;
 }
 
-export function CellExpanderFormatter({ isCellSelected, expanded, onCellExpand }: CellExpanderFormatterProps) {
+export function CellExpanderFormatter({
+  isCellSelected,
+  expanded,
+  onCellExpand,
+}: CellExpanderFormatterProps) {
   const iconRef = useFocusRef<HTMLSpanElement>(isCellSelected);
 
   function handleClick(e: React.MouseEvent<HTMLSpanElement>) {
@@ -16,7 +19,7 @@ export function CellExpanderFormatter({ isCellSelected, expanded, onCellExpand }
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLSpanElement>) {
-    if (e.key === ' ' || e.key === 'Enter') {
+    if (e.key === " " || e.key === "Enter") {
       e.preventDefault();
       onCellExpand();
     }
@@ -24,15 +27,9 @@ export function CellExpanderFormatter({ isCellSelected, expanded, onCellExpand }
 
   return (
     <div className="rdg-cell-expand">
-      <span
-        onClick={handleClick}
-        onKeyDown={handleKeyDown}
-      >
-        <span
-          ref={iconRef}
-          tabIndex={-1}
-        >
-          {expanded ? '\u25BC' : '\u25B6'}
+      <span onClick={handleClick} onKeyDown={handleKeyDown}>
+        <span ref={iconRef} tabIndex={-1}>
+          {expanded ? "\u25BC" : "\u25B6"}
         </span>
       </span>
     </div>
