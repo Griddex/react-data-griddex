@@ -55,7 +55,7 @@ faker.locale = "en_GB";
 
 const ApexRDGCheckbox: Column<any, any> = {
   ...SelectColumn,
-  frozen: true,
+  // frozen: true,
   headerRenderer() {
     return <div>SELECT</div>;
   },

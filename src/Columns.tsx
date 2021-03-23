@@ -6,7 +6,7 @@ export const SELECT_COLUMN_KEY = "select-row";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const SelectColumn: Column<any, any> = {
-  key: "SELECT_CONTROL_KEY",
+  key: "APEX_SELECT_KEY",
   name: "",
   width: 35,
   maxWidth: 35,
