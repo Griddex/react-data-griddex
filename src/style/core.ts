@@ -28,7 +28,7 @@ const darkTheme = `
   --row-selected-background-color: hsla(188deg 80% 96% 0.50);
   --row-selected-hover-background-color: hsla(188deg 80% 96% 0.46);
 
-  --checkbox-color: hsla(188deg 80% 20% 0.50);
+  --checkbox-color: hsla(188deg 80% 37% 1.00);
   --checkbox-focus-color: hsla(188deg 80% 20% 0.60);
   --checkbox-disabled-border-color: #000;
   --checkbox-disabled-background-color: #333;
