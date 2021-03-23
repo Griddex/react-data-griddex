@@ -25,6 +25,7 @@
   "module": "./lib/bundle.js",
   "types": "./lib/index.d.ts",
   "files": [
+    "lib",
     "tmp"
   ],
   "sideEffects": false,
