@@ -64,15 +64,10 @@ const ApexRDGCheckbox: Column<any, any> = {
       <SelectCellFormatter
         aria-label="Select"
         tabIndex={-1}
-        isCellSelected={false}
-        // isCellSelected={props.isCellSelected}
-        // value={props.isRowSelected}
+        isCellSelected={props.isCellSelected}
         value={props.isRowSelected}
         onClick={(e) => e.stopPropagation()}
         onChange={props.onRowSelectionChange}
-        // onChange={(value: boolean, isShiftClick: boolean) =>
-        //   console.log("A change")
-        // }
       />
     );
   },
