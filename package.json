@@ -23,10 +23,9 @@
   "browser": "./lib/bundle.js",
   "main": "./lib/bundle.cjs",
   "module": "./lib/bundle.js",
-  "types": "./lib/index.d.ts",
+  "types": "./lib/src/index.d.ts",
   "files": [
-    "lib",
-    "tmp"
+    "lib"
   ],
   "sideEffects": false,
   "scripts": {
