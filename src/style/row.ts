@@ -1,5 +1,5 @@
-import { css } from '@linaria/core';
-import { cell } from './cell';
+import { css } from "@linaria/core";
+import { cell } from "./cell";
 
 export const row = css`
   contain: strict;
@@ -13,7 +13,6 @@ export const row = css`
   height: var(--row-height); // needed on Firefox
   line-height: var(--row-height);
   background-color: var(--background-color);
-
   &:hover {
     background-color: var(--row-hover-background-color);
   }

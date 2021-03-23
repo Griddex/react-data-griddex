@@ -1,10 +1,10 @@
-import { forwardRef, memo } from 'react';
-import type { RefAttributes } from 'react';
-import { css } from '@linaria/core';
+import { forwardRef, memo } from "react";
+import type { RefAttributes } from "react";
+import { css } from "@linaria/core";
 
-import { cellSelectedClassname } from './style';
-import { getCellStyle, getCellClassname } from './utils';
-import type { CellRendererProps } from './types';
+import { cellSelectedClassname } from "./style";
+import { getCellStyle, getCellClassname } from "./utils";
+import type { CellRendererProps } from "./types";
 
 const cellCopied = css`
   background-color: #ccccff;
@@ -41,34 +41,37 @@ const cellDragHandle = css`
 
 const cellDragHandleClassname = `rdg-cell-drag-handle ${cellDragHandle}`;
 
-function Cell<R, SR>({
-  className,
-  column,
-  isCellSelected,
-  isCopied,
-  isDraggedOver,
-  isRowSelected,
-  row,
-  rowIdx,
-  dragHandleProps,
-  onRowClick,
-  onClick,
-  onDoubleClick,
-  onContextMenu,
-  onRowChange,
-  selectCell,
-  selectRow,
-  ...props
-}: CellRendererProps<R, SR>, ref: React.Ref<HTMLDivElement>) {
+function Cell<R, SR>(
+  {
+    className,
+    column,
+    isCellSelected,
+    isCopied,
+    isDraggedOver,
+    isRowSelected,
+    row,
+    rowIdx,
+    dragHandleProps,
+    onRowClick,
+    onClick,
+    onDoubleClick,
+    onContextMenu,
+    onRowChange,
+    selectCell,
+    selectRow,
+    ...props
+  }: CellRendererProps<R, SR>,
+  ref: React.Ref<HTMLDivElement>
+) {
   const { cellClass } = column;
   className = getCellClassname(
     column,
     {
       [cellSelectedClassname]: isCellSelected,
       [cellCopiedClassname]: isCopied,
-      [cellDraggedOverClassname]: isDraggedOver
+      [cellDraggedOverClassname]: isDraggedOver,
     },
-    typeof cellClass === 'function' ? cellClass(row) : cellClass,
+    typeof cellClass === "function" ? cellClass(row) : cellClass,
     className
   );
 
@@ -107,7 +110,7 @@ function Cell<R, SR>({
       aria-selected={isCellSelected}
       ref={ref}
       className={className}
-      style={getCellStyle(column)}
+      style={{ ...getCellStyle(column), borderRight: "none" }}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
@@ -133,4 +136,6 @@ function Cell<R, SR>({
   );
 }
 
-export default memo(forwardRef(Cell)) as <R, SR = unknown>(props: CellRendererProps<R, SR> & RefAttributes<HTMLDivElement>) => JSX.Element;
+export default memo(forwardRef(Cell)) as <R, SR = unknown>(
+  props: CellRendererProps<R, SR> & RefAttributes<HTMLDivElement>
+) => JSX.Element;

@@ -55,7 +55,7 @@ faker.locale = "en_GB";
 
 const ApexRDGCheckbox: Column<any, any> = {
   ...SelectColumn,
-  // frozen: true,
+  frozen: false,
   headerRenderer() {
     return <div>SELECT</div>;
   },
@@ -79,7 +79,7 @@ const columns: readonly Column<Row>[] = [
     name: "ID",
     width: 80,
     resizable: true,
-    frozen: true,
+    frozen: false,
   },
   ApexRDGCheckbox,
   {
@@ -108,7 +108,7 @@ const columns: readonly Column<Row>[] = [
     name: "First Name",
     width: 200,
     resizable: true,
-    frozen: true,
+    frozen: false,
     editor: TextEditor,
   },
   {
@@ -116,7 +116,7 @@ const columns: readonly Column<Row>[] = [
     name: "Last Name",
     width: 200,
     resizable: true,
-    frozen: true,
+    frozen: false,
     editor: TextEditor,
   },
   {

@@ -1,9 +1,10 @@
-import { css } from '@linaria/core';
+import { css } from "@linaria/core";
 
 export const cell = css`
   contain: strict;
   contain: size layout style paint;
   padding: 0 8px;
+
   border-right: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
   background-color: inherit;
@@ -25,7 +26,7 @@ const cellFrozen = css`
 export const cellFrozenClassname = `rdg-cell-frozen ${cellFrozen}`;
 
 export const cellFrozenLast = css`
-  box-shadow: 2px 0 5px -2px rgba(136, 136, 136, .3);
+  box-shadow: 2px 0 5px -2px rgba(136, 136, 136, 0.3);
 `;
 
 export const cellFrozenLastClassname = `rdg-cell-frozen-last ${cellFrozenLast}`;
