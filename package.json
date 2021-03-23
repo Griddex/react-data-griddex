@@ -1,6 +1,6 @@
 {
   "name": "react-data-griddex",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "license": "MIT",
   "description": "Excel-like grid component built with React, with editors, keyboard navigation, copy & paste, and the like",
   "keywords": [
