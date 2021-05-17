@@ -1,6 +1,6 @@
-import { css } from '@linaria/core';
-import { rowSelected } from './row';
-import { cell, cellFrozenLast } from './cell';
+import { css } from "@linaria/core";
+import { rowSelected } from "./row";
+import { cell, cellFrozenLast } from "./cell";
 
 const groupRow = css`
   &:not(.${rowSelected}) {
@@ -8,7 +8,7 @@ const groupRow = css`
   }
 
   > .${cell}:not(:last-child):not(.${cellFrozenLast}) {
-    border-right: none;
+    border-right: 1px solid var(--border-color);
   }
 `;
 

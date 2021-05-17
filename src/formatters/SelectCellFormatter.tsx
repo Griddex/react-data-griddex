@@ -77,10 +77,6 @@ export function SelectCellFormatter({
   "aria-label": ariaLabel,
   "aria-labelledby": ariaLabelledBy,
 }: SelectCellFormatterProps) {
-  console.log(
-    "Logged output --> ~ file: SelectCellFormatter.tsx ~ line 79 ~ value",
-    value
-  );
   const inputRef = useFocusRef<HTMLInputElement>(isCellSelected);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {

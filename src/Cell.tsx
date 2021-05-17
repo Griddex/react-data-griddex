@@ -110,7 +110,7 @@ function Cell<R, SR>(
       aria-selected={isCellSelected}
       ref={ref}
       className={className}
-      style={{ ...getCellStyle(column), borderRight: "none" }}
+      style={{ ...getCellStyle(column) }}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}

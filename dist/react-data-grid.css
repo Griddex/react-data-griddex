@@ -265,7 +265,7 @@
   background-color:var(--header-background-color)
 }
 .rdg-group-row>.rdg-cell:not(:last-child):not(.rdg-cell-frozen-last){
-  border-right:none
+  border-right:1px solid var(--border-color)
 }
 .rdg-group-row-selected::after{
   content:"";
